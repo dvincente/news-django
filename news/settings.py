@@ -120,4 +120,4 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-COINDESK_API_KEY = os.getenv('COINDESK_API_KEY')
+CHAINECHO_API_KEY = os.getenv('CHAINECHO_API_KEY')

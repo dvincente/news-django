@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 import os
 import requests
+import chainecho
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
 from django.views.decorators.csrf import csrf_exempt
@@ -11,17 +12,12 @@ def index(request):
 
 @require_GET
 @csrf_exempt  # Optional, depending on how you use the endpoint
-def coindesk_news(request):
+def chainecho_news(request):
     try:
-        api_key = os.getenv('COINDESK_API_KEY')  # Or settings.COINDESK_API_KEY
-        params = {
-            'lang': 'EN',
-            'limit': 100,
-            'api_key': api_key,
-        }
-        response = requests.get("https://data-api.coindesk.com/news/v1/article/list", params=params)
-        response.raise_for_status()
-        return JsonResponse(response.json(), safe=False)
+        api_key = os.getenv('CHAINECHO_API_KEY')  # Or settings.CHAINECHO_API_KEY
+        api = chainecho.API(api_key)
+        data = api.getLatestNews(limit=100)
+        return JsonResponse(data, safe=False)
     except requests.exceptions.RequestException as e:
-        print("Error fetching data from Coindesk:", e)
-        return JsonResponse({"error": "Failed to fetch data from Coindesk"}, status=500)
+        print("Error fetching data from Chainecho:", e)
+        return JsonResponse({"error": "Failed to fetch data from Chainecho"}, status=500)
